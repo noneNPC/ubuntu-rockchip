@@ -7,7 +7,7 @@ run-name: Build Jammy
 
 jobs:
   rootfs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build rootfs (jammy)
     strategy:
         matrix:
@@ -55,7 +55,7 @@ jobs:
             if-no-files-found: error
 
   kernel:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build kernel (jammy)
     steps:
       - name: Get more disk space
@@ -98,7 +98,7 @@ jobs:
             if-no-files-found: error
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [rootfs, kernel]
     name: Build image (jammy)
 
