@@ -134,6 +134,20 @@ setup_mountpoint $chroot_dir
 # Update packages
 chroot $chroot_dir apt-get update
 chroot $chroot_dir apt-get -y upgrade
+
+chroot ${chroot_dir} apt-get install -y \
+    software-properties-common \
+    ca-certificates \
+    gnupg \
+    curl \
+    mtd-utils \
+    linux-base \
+    initramfs-tools \
+    u-boot-menu \
+    ubuntu-desktop
+    
+    
+
     
 # Run config hook to handle board specific changes
 if [[ $(type -t config_image_hook__"${BOARD}") == function ]]; then
@@ -164,6 +178,8 @@ chroot ${chroot_dir} update-initramfs -u
 chroot ${chroot_dir} apt-get -y clean
 chroot ${chroot_dir} apt-get -y autoclean
 chroot ${chroot_dir} apt-get -y autoremove
+chroot ${chroot_dir} apt-get install -f -y
+
 
 # Umount the root filesystem
 teardown_mountpoint $chroot_dir
