@@ -71,21 +71,8 @@ jobs:
           run-id: ${{ inputs.noble_run_id }}
 
 
-      - name: Compress images
-        shell: bash
-        run: |
-          cd release
-
-          for file in *.img; do
-            xz -T0 -z "$file"
-          done
-
-
-      - name: Generate checksum
-        shell: bash
-        run: |
-          cd release
-          sha256sum * > SHA256SUMS
+      - name: List files
+        run: ls -lh release/
 
 
       - name: Create GitHub Release
@@ -95,6 +82,8 @@ jobs:
           name: Ubuntu Rockchip ${{ inputs.version }}
           prerelease: ${{ inputs.prerelease }}
           files: |
-            release/*
+            release/*.img.xz
+            release/*.sha256
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
