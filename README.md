@@ -19,7 +19,7 @@ Ubuntu Rockchip 是一个面向 Rockchip ARM 平台的 Ubuntu 移植项目。
 本仓库在原项目基础上进行了针对性修改，主要面向：
 
 - Youyeetoo R1
-- RK3588 / RK3588S 平台
+- RK3588S 平台
 - Ubuntu 22.04 LTS
 - Ubuntu 24.04 LTS
 
@@ -52,7 +52,7 @@ Ubuntu Rockchip 是一个面向 Rockchip ARM 平台的 Ubuntu 移植项目。
 
 目前支持两种系统版本：
 
-### Desktop 桌面版
+### Desktop
 
 适用于：
 
@@ -166,23 +166,12 @@ https://github.com/SuperKali/ubuntu-rockchip
 
 进行了以下修改：
 
-- 增加 Youyeetoo R1 支持
-- 增加 RK3588S 相关配置
 - 修改镜像构建流程
 - 调整 GitHub Actions 工作流
 - 删除不需要的目标设备
 - 优化板级配置
-- 为机器人和边缘计算场景进行适配
-
----
-
-## 计划
-
-- [ ] 完善 RK3588S 硬件加速支持
-- [ ] 集成 RKNN AI运行环境
-- [ ] 提供 ROS2 开发环境镜像
-- [ ] 优化机器人应用部署
-- [ ] 发布稳定版本镜像
+- 删除不可用的GPU驱动源
+- 添加可用源
 
 ---
 
