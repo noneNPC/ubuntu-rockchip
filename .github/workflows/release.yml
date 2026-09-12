@@ -1,0 +1,100 @@
+name: Release Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      jammy_run_id:
+        description: "Build Jammy workflow run ID"
+        required: true
+
+      noble_run_id:
+        description: "Build Noble workflow run ID"
+        required: true
+
+      version:
+        description: "Release version"
+        required: true
+        default: "v0.1.0"
+
+      prerelease:
+        description: "Mark as prerelease"
+        required: false
+        type: boolean
+        default: true
+
+
+permissions:
+  contents: write
+  actions: read
+
+
+jobs:
+  release:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      - name: Download Ubuntu 22.04 Desktop
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-22.04-preinstalled-desktop-arm64-youyeetoo-r1
+          path: release/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.jammy_run_id }}
+
+
+      - name: Download Ubuntu 22.04 Server
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-22.04-preinstalled-server-arm64-youyeetoo-r1
+          path: release/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.jammy_run_id }}
+
+
+      - name: Download Ubuntu 24.04 Desktop
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-24.04-preinstalled-desktop-arm64-youyeetoo-r1
+          path: release/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.noble_run_id }}
+
+
+      - name: Download Ubuntu 24.04 Server
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-24.04-preinstalled-server-arm64-youyeetoo-r1
+          path: release/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.noble_run_id }}
+
+
+      - name: Compress images
+        shell: bash
+        run: |
+          cd release
+
+          for file in *.img; do
+            xz -T0 -z "$file"
+          done
+
+
+      - name: Generate checksum
+        shell: bash
+        run: |
+          cd release
+          sha256sum * > SHA256SUMS
+
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          name: Ubuntu Rockchip ${{ inputs.version }}
+          prerelease: ${{ inputs.prerelease }}
+          files: |
+            release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
